@@ -1,0 +1,27 @@
+version: 0.1
+component: build
+timeoutInSeconds: 6000
+runAs: root
+
+steps:
+  - type: Command
+    name: Test Buildx Compatibility in OCI DevOps
+    timeoutInSeconds: 300
+    command: |
+      echo "Docker version:"
+      docker version
+
+      echo "Checking if Buildx is available:"
+      docker buildx version || echo "Buildx not available."
+
+      echo "Listing available builders:"
+      docker buildx ls || echo "Unable to list builders."
+
+      echo "Trying to create a builder:"
+      docker buildx create --name multiarch-test || echo "Buildx create failed."
+
+      echo "Trying to use the created builder:"
+      docker buildx use multiarch-test || echo "Buildx use failed."
+
+      echo "Trying to enable QEMU support for ARM builds:"
+      docker run --rm --privileged multiarch/qemu-user-static --reset -p yes || echo "QEMU setup failed."
