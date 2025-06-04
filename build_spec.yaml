@@ -29,6 +29,5 @@ steps:
   - type: Command
     name: Build for ARM64 only
     command: |
-      echo 'FROM busybox\nRUN echo "Hello ARM64!"' > Dockerfile
+      printf "FROM busybox\nRUN echo \"Hello ARM64!\"\n" > Dockerfile
       docker buildx build --platform linux/arm64 -t test/arm64-fail .
-
